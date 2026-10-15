@@ -1,41 +1,79 @@
-# Technical note
+# Scholarship Intelligence - Technical Note
+Version 1.1.0 | 15 October 2026
 
-## Architecture and stack
+## Architecture and purpose
 
-Scholarship Intelligence is a local Python application using Requests for synchronous HTTP crawling, Scrapy source/link policies and HTML preparation, Pydantic for a common record schema, pypdf for text PDF preparation, SQLite for transactional persistence, and Streamlit for the interface. The same synchronous crawler runs from the terminal and dashboard worker. No language model, paid API or API key is used.
+- Find scholarship opportunities for Indian students and turn official website information into records that can be checked.
+- Flow: discover links -> fetch pages -> extract facts -> check evidence -> calculate confidence -> store/update -> dashboard.
+- Startup shows genuine saved crawl results. Source-check dates stay unchanged. Full evidence files prepare in the background.
+- Crawl now starts a live background update. Daily updates run at 09:00 IST while the local dashboard is running.
 
-The pipeline starts from five provider/portal seeds across government, university, corporate CSR, international and NGO/trust sources. Each complete source run discovers opportunities, retrieves response bytes, groups programme-specific material, prepares documents, extracts facts, validates evidence, calculates confidence, stores results and refreshes the dashboard. Startup displays a checksummed view of genuine saved records immediately and restores the full evidence archive in the background, preserving original retrieval dates. Existing nonempty databases are not overwritten. A persisted run report supports recovery. Source failures are reported individually, so completed sources remain inspectable.
+## Technology choices
 
-## Discovery and source classification
+- Python 3.11: runs the workflow and extraction rules. No model/API key is needed.
+- Requests: downloads pages and checks for changes. Scrapy/Parsel: supports link rules and HTML selection.
+- pypdf: reads text PDFs and keeps physical page numbers. Pydantic: checks the record structure.
+- SQLite: stores records, sources, evidence and history. Streamlit: shows the dashboard and crawl controls.
+- uv: installs locked dependencies. unittest: runs regression tests. Windows OCR handles the scanned notice in the separate replay.
 
-Seed configuration defines provider identity, authoritative hosts, relevant paths and programme grouping. Links discovered within those boundaries become crawl candidates. NSP catalogue filters and programme cards are enumerated. This discovers records beyond a list of manually entered individual scholarship URLs, although new website layouts can require additional source adapters.
+## Discovery and extraction
 
-The crawler obeys robots rules and request spacing, limits page depth/size, records failures and distinguishes observed coverage from an assertion of complete website coverage. Authoritative host configuration is an explicit trust input; it is not presented as automatic proof that any arbitrary internet host is authentic.
+- Five starting sources: FFE, IIT Delhi, NSP, Chevening India and HDFC ECSS. These cover trust, university, government, international and corporate CSR funding.
+- The crawler follows relevant links and portal catalogue entries. It discovers individual opportunities beyond the starting URLs.
+- Source rules group pages by scholarship. Awards and other excluded programme types stay out of the main dashboard.
+- Python rules read headings, paragraphs, lists and tables in HTML, and page text in PDFs.
+- Fields include name, provider, benefits, eligibility, application link, opening/closing dates, documents, selection and renewal.
+- Original bytes, URLs, retrieval times and content hashes are saved. Each important quote points to its source block or PDF page.
+- Coverage depends on accessible links and source rules. The crawler cannot guarantee every page on a website is found.
 
-## Extraction and anti-hallucination
+## Verification and prevention of invented facts
 
-Saved source bytes receive content hashes and retrieval timestamps. HTML is prepared into located blocks, headings, lists, links and tables. Text PDFs preserve physical pages. Rules recognize relevant sections and literal field content: identity, benefits, eligibility, dates, application routing, documents, selection and renewal. Source-specific grouping prevents unrelated programme cards from being merged.
+- Check that the source belongs to the configured official provider and is linked to the scholarship.
+- Check source hashes, record/bundle identity, exact quotations, field paths and block/page locations.
+- Check whether the quoted passage supports the field in context and includes the relevant supporting wording.
+- Missing facts stay unspecified. Conflicting or unsupported facts are withheld or flagged for review.
+- Do not infer a current cycle from a filename, an unrelated date or a recent download. Do not turn a conditional benefit into an invented fixed amount.
 
-Claims carry evidence IDs and inspected snapshot identities. Missing or ambiguous facts remain unspecified or withheld. Filenames, generic portal dates and recipient years do not establish a current scholarship cycle. Conditional monetary rates are not simplified into a fabricated fixed grant. Eligibility text remains source prose; comprehensive machine-readable applicant eligibility evaluation is a limitation.
+## Confidence-score formula
 
-## Verification and confidence
+- Each component uses a 0-100 scale. The score is calculated by Python rules, not supplied by a model.
+- Confidence = 0.30 x A + 0.50 x F + 0.20 x C
+- A - official-source authenticity (30%): 100 when the ownership check passes; otherwise 50.
+- F - field support (50%): 100 x supported applicable fields / total applicable fields. An explicitly checked not-applicable field counts as supported. With no applicable fields, F is 0.
+- Fields confirmed as not specified in the inspected source are left out of that fraction. They do not earn support points. Missing core fields still block verification.
+- C - dated offering context (20%): 100 only when the source is fresh and a valid scholarship-specific application window, or an allowed current dated-cycle context, is supported. Otherwise C is 0.
+- A source is fresh only when the required retrievals are within 30 days and freshness checks pass. A recent download alone does not establish an open application window.
 
-Evidence validation checks hashes, bundle identity, real field paths, exact quoted substrings, source block/page locations, and application links. Independent verification checks whether the quotation supports the field in context and covers the expected relevant source passages. Reordered or duplicated quotations cannot substitute for missing text. A score is recomputed from pinned artifacts rather than trusted merely because a saved JSON file contains a high number.
+## Rules for the VERIFIED label
 
-The score weights official-source authenticity at 30%, supported applicable fields at 50%, and dated offering context at 20%. Verification requires at least 95 plus critical gates for supported core facts, routing, freshness and absence of unresolved conflicts/incomplete required material. Retrieval older than 30 days fails the freshness requirement. An official source alone is insufficient for whole-record verification. Scores are evidence-based rule outputs, not calibrated probabilities of real-world correctness.
+- Confidence must be at least 95 and every critical check must pass.
+- Name, provider, official source, benefits and eligibility must be supported. The application route must be supported or checked as not applicable.
+- Unresolved conflicts, missing required supporting material, or failed freshness/context checks prevent verification.
+- If a critical check fails, the final confidence is capped at 94 and the record remains REVIEW_REQUIRED.
+- No score is forced upward to meet a target. The score measures rule-based evidence support; it is not a probability that every real-world fact is correct.
 
-Application lifecycle is evaluated separately from factual confidence. Supported dates can show active, expiring or expired windows; unknown dates keep availability unresolved. The application cycle is retained because it identifies the advertised round, whereas lifecycle describes the evaluation date.
+## Database and change detection
 
-## Persistence, updates and automation
+- Eight SQLite tables: programmes, scholarships, sources, scholarship_sources, source_snapshots, evidence, changes and crawl_runs.
+- Programme records hold identity. Scholarship records hold offering facts, dates, status, confidence and review details.
+- Sources and snapshots preserve URLs and source versions. Evidence links a field to a quotation and location. Changes keep old/new values, detection times and evidence references.
+- Every live run checks listing pages and known sources. Conditional HTTP requests reuse saved bytes when the server confirms no change; otherwise downloaded hashes are compared.
+- Unchanged content reuses validated extraction only if artifacts, source configuration and processing rules still match. New or changed content is processed again.
+- Accepted updates preserve history. Unresolved updates remain review proposals. Failed source access does not automatically mean expired.
+- Lifecycle is separate from verification: ACTIVE, EXPIRING_SOON, EXPIRED, REVIEW_REQUIRED or NO_LONGER_VERIFIABLE. Unknown dates do not mean applications are open.
 
-SQLite retains programme identity, scholarship facts, source associations, snapshots, evidence, crawl runs and change history. Writes use transactions and foreign keys. Identical imports reuse existing identities. Repeated live runs compare source values and preserve old/new evidence, distinguishing a changed source from revised extraction rules. Unresolved updates remain proposals and do not silently erase accepted facts.
+## Results
 
-Repeated live runs use saved ETag/Last-Modified validators where supported. Valid 304 responses reuse hash-checked bytes; other responses are downloaded and compared by hash. Unchanged records reuse independently validated results only after checking artifact pins and a fingerprint of the extraction/validation code and seed configuration. Missing or changed receipts trigger processing again. Date-dependent freshness, confidence and expiry are recalculated; unreachable sources require re-verification rather than automatic expiry. Each run retains its HTTP event log and progress/completion report.
+- Genuine saved live run, completed 15 October 2026: 296 scholarship records across five source categories.
+- Official-source identity confirmed: 296. Whole-record VERIFIED / confidence >=95: 4. REVIEW_REQUIRED: 292.
+- Active or expiring-soon: 119. Expired: 9. Average confidence: 83.1. Model/API calls: 0.
+- Final incremental-workflow release check: 157 automated tests passed. Results can change with source updates and the evaluation date.
+- Official-notice replay, 15 October 2026 at 22:38 IST: 2 changed deadlines, 2 expired examples, all reported evidence checks passed, no failures and no production rows changed.
+- Changed examples: NMMSS and institutional CSSS renewal instructions, each from 30 September to 31 October 2026. Later deadlines were unexpired on the check date.
+- Expiry examples: Chevening India and DAAD HSK, evaluated across real historical windows. This is historical official-notice replay, not a newly observed production change today.
 
-The dashboard's manual button starts the shared live pipeline in a background worker. The daily scheduler runs at 09:00 IST while the server process is alive, catches up once after a missed schedule, and prevents overlapping dashboard jobs. It is a local scheduler, not an always-on hosted service.
+## Current limits
 
-## Demonstration and limits
-
-The optional official-notice replay retrieves genuine preserved revisions into an isolated database. NMMSS and institutional CSSS renewal notices demonstrate deadline changes. Chevening/DAAD published windows demonstrate historical active-to-expired evaluation. This does not claim two observed production crawls of the historical pages. It is date-sensitive and reports partial failures. Scanned replay material requires Windows English OCR and Poppler.
-
-The prior retained dataset had 296 scholarships, five source types and four records at least 95. The assignment's ten-high-confidence-record minimum is not achieved. The release includes this genuine automatically extracted dataset and its supporting artifacts for saved-results startup, without manual assessments. New live runs generate their own evidence and counts. Remaining limits include scanned source PDFs, complex conditional tables, shared guidance, missing offering context and inaccessible websites. Unsupported records remain review required.
+- The ten records at >=95 and fifteen whole-record verifications required by the assignment are not achieved. Official-source confirmation is a separate measure.
+- Scanned normal-workflow PDFs, complex tables, shared guidance, missing dates and blocked websites can leave fields unresolved.
+- Eligibility remains source wording rather than a complete applicant-decision engine. The scheduler requires the local server to stay running.
