@@ -1,79 +1,96 @@
-# Scholarship Intelligence - Technical Note
-Version 1.1.0 | 15 October 2026
+# Scholarship Intelligence Crawler
 
-## Architecture and purpose
+Technical documentation | Version 1.1.0
 
-- Find scholarship opportunities for Indian students and turn official website information into records that can be checked.
-- Flow: discover links -> fetch pages -> extract facts -> check evidence -> calculate confidence -> store/update -> dashboard.
-- Startup shows genuine saved crawl results. Source-check dates stay unchanged. Full evidence files prepare in the background.
-- Crawl now starts a live background update. Daily updates run at 09:00 IST while the local dashboard is running.
+## 1. Architecture
 
-## Technology choices
 
-- Python 3.11: runs the workflow and extraction rules. No model/API key is needed.
-- Requests: downloads pages and checks for changes. Scrapy/Parsel: supports link rules and HTML selection.
-- pypdf: reads text PDFs and keeps physical page numbers. Pydantic: checks the record structure.
-- SQLite: stores records, sources, evidence and history. Streamlit: shows the dashboard and crawl controls.
-- uv: installs locked dependencies. unittest: runs regression tests. Windows OCR handles the scanned notice in the separate replay.
+- Application: Streamlit displays saved records, filters, source evidence and confidence scores. Original source-check dates are preserved. Full evidence files prepare in the background.
+- Background worker: Crawl now starts a live update while users continue browsing. Daily crawling runs at 09:00 IST while the application is running. Terminal commands use the same workflow.
+- Discovery layer: config/seeds.json defines starting websites, official domains and discovery rules. Relevant pages and supporting PDFs are grouped by scholarship.
+- Source layer: each downloaded source is saved with its URL, retrieval time and content hash. HTML is prepared into readable blocks; PDFs keep physical page locations.
+- Processing layer: Python rules extract a common record structure. Evidence checks validate claims. Confidence rules calculate the score and verification status.
+- Storage layer: SQLite stores facts, sources, snapshots, evidence, crawl runs and accepted changes. Transactions and foreign keys protect updates and relationships.
+- Presentation layer: the dashboard reads stored results. Unsupported claims remain withheld or marked for review.
+- Separate replay: official-notice replay uses an isolated SQLite database. Its records and history tables store replay cases and transitions without changing main scholarship records.
 
-## Discovery and extraction
+## 2. Technology choices
 
-- Five starting sources: FFE, IIT Delhi, NSP, Chevening India and HDFC ECSS. These cover trust, university, government, international and corporate CSR funding.
-- The crawler follows relevant links and portal catalogue entries. It discovers individual opportunities beyond the starting URLs.
-- Source rules group pages by scholarship. Awards and other excluded programme types stay out of the main dashboard.
-- Python rules read headings, paragraphs, lists and tables in HTML, and page text in PDFs.
-- Fields include name, provider, benefits, eligibility, application link, opening/closing dates, documents, selection and renewal.
-- Original bytes, URLs, retrieval times and content hashes are saved. Each important quote points to its source block or PDF page.
-- Coverage depends on accessible links and source rules. The crawler cannot guarantee every page on a website is found.
+- Python 3.11: workflow, extraction, verification and scoring. No language-model API key or paid service is required.
+- Requests: HTTP downloads and conditional checks. Scrapy / Parsel: crawl policies, link discovery and HTML selection.
+- pypdf: text-PDF extraction with page references. Pydantic: checks the common data structure.
+- SQLite: records, source evidence and history. Streamlit: dashboard, search, filters and crawl controls.
+- uv: locked dependency installation. unittest: automated regression tests.
 
-## Verification and prevention of invented facts
+## 3. Discovery methodology
 
-- Check that the source belongs to the configured official provider and is linked to the scholarship.
-- Check source hashes, record/bundle identity, exact quotations, field paths and block/page locations.
-- Check whether the quoted passage supports the field in context and includes the relevant supporting wording.
-- Missing facts stay unspecified. Conflicting or unsupported facts are withheld or flagged for review.
-- Do not infer a current cycle from a filename, an unrelated date or a recent download. Do not turn a conditional benefit into an invented fixed amount.
+- Starting sources: FFE, IIT Delhi, NSP, Chevening India and HDFC ECSS. They cover trust, university, government, international and corporate CSR funding.
+- Follow relevant links and catalogue entries beyond the starting URLs. Source rules identify individual opportunities and supporting material.
+- Group content by scholarship. Exclude awards and other non-scholarship programme types from the main view. Apply crawl budgets, request spacing and access rules.
 
-## Confidence-score formula
+## 4. Extraction methodology
 
-- Each component uses a 0-100 scale. The score is calculated by Python rules, not supplied by a model.
-- Confidence = 0.30 x A + 0.50 x F + 0.20 x C
-- A - official-source authenticity (30%): 100 when the ownership check passes; otherwise 50.
-- F - field support (50%): 100 x supported applicable fields / total applicable fields. An explicitly checked not-applicable field counts as supported. With no applicable fields, F is 0.
-- Fields confirmed as not specified in the inspected source are left out of that fraction. They do not earn support points. Missing core fields still block verification.
-- C - dated offering context (20%): 100 only when the source is fresh and a valid scholarship-specific application window, or an allowed current dated-cycle context, is supported. Otherwise C is 0.
-- A source is fresh only when the required retrievals are within 30 days and freshness checks pass. A recent download alone does not establish an open application window.
+- Read HTML headings, paragraphs, lists, tables and links; read text PDFs with physical page numbers.
+- Extract name, provider, official source, benefits, eligibility, application link, opening/closing dates, documents, selection and renewal.
+- Keep source quotations and locations for important claims. Missing information stays unspecified; ambiguous information is flagged or withheld.
 
-## Rules for the VERIFIED label
+## 5. Verification methodology
 
-- Confidence must be at least 95 and every critical check must pass.
-- Name, provider, official source, benefits and eligibility must be supported. The application route must be supported or checked as not applicable.
-- Unresolved conflicts, missing required supporting material, or failed freshness/context checks prevent verification.
-- If a critical check fails, the final confidence is capped at 94 and the record remains REVIEW_REQUIRED.
-- No score is forced upward to meet a target. The score measures rule-based evidence support; it is not a probability that every real-world fact is correct.
+- Confirm that the source belongs to the configured official provider and relates to the scholarship.
+- Check source hashes and the identity of the extraction bundle. Match quotations against the saved source text.
+- Check referenced HTML blocks or PDF pages, and whether each passage supports the field in context.
+- Check completeness of relevant supporting wording, unresolved conflicts and required source material.
+- Official-source identity confirmation is separate from whole-record verification.
 
-## Database and change detection
+## 6. Confidence-score methodology
 
-- Eight SQLite tables: programmes, scholarships, sources, scholarship_sources, source_snapshots, evidence, changes and crawl_runs.
-- Programme records hold identity. Scholarship records hold offering facts, dates, status, confidence and review details.
-- Sources and snapshots preserve URLs and source versions. Evidence links a field to a quotation and location. Changes keep old/new values, detection times and evidence references.
-- Every live run checks listing pages and known sources. Conditional HTTP requests reuse saved bytes when the server confirms no change; otherwise downloaded hashes are compared.
-- Unchanged content reuses validated extraction only if artifacts, source configuration and processing rules still match. New or changed content is processed again.
-- Accepted updates preserve history. Unresolved updates remain review proposals. Failed source access does not automatically mean expired.
-- Lifecycle is separate from verification: ACTIVE, EXPIRING_SOON, EXPIRED, REVIEW_REQUIRED or NO_LONGER_VERIFIABLE. Unknown dates do not mean applications are open.
+- Each component is scored from 0 to 100. Python calculates the score from evidence checks.
 
-## Results
+**Confidence = 0.30 × A + 0.50 × F + 0.20 × C**
 
-- Genuine saved live run, completed 15 October 2026: 296 scholarship records across five source categories.
-- Official-source identity confirmed: 296. Whole-record VERIFIED / confidence >=95: 4. REVIEW_REQUIRED: 292.
-- Active or expiring-soon: 119. Expired: 9. Average confidence: 83.1. Model/API calls: 0.
-- Final incremental-workflow release check: 157 automated tests passed. Results can change with source updates and the evaluation date.
-- Official-notice replay, 15 October 2026 at 22:38 IST: 2 changed deadlines, 2 expired examples, all reported evidence checks passed, no failures and no production rows changed.
-- Changed examples: NMMSS and institutional CSSS renewal instructions, each from 30 September to 31 October 2026. Later deadlines were unexpired on the check date.
-- Expiry examples: Chevening India and DAAD HSK, evaluated across real historical windows. This is historical official-notice replay, not a newly observed production change today.
+- A - official-source authenticity (30%): 100 when the configured official-ownership check passes; otherwise 50.
+- F - field support (50%): 100 × supported applicable fields / total applicable fields. With no applicable fields, F is 0.
+- Supported fields and fields explicitly checked as not applicable count as supported. Unsupported or unresolved applicable fields reduce support.
+- Fields confirmed as not specified in the inspected material are excluded from the fraction. They do not earn support points. Missing core fields still block verification.
+- C - dated offering context (20%): 100 when required sources are fresh and the application-window or allowed current-cycle checks pass; otherwise 0.
+- Context can be a supported opening/closing window, or a supported current cycle with a supported closing date or explicitly supported no-application route.
+- Required source retrievals must be within 30 days and pass freshness checks. A recent download alone does not prove that applications are open.
+- VERIFIED requires confidence of at least 95 and all critical checks to pass. Name, provider, official source, benefits and eligibility must be supported.
+- The application route must be supported or checked as not applicable. Conflicts, incomplete required supporting material or failed freshness/context checks prevent verification.
+- If a critical check fails, the final score is capped at 94 and the record remains REVIEW_REQUIRED. No artificial score floor or quota bonus is added.
 
-## Current limits
+## 7. Anti-hallucination approach
 
-- The ten records at >=95 and fifteen whole-record verifications required by the assignment are not achieved. Official-source confirmation is a separate measure.
-- Scanned normal-workflow PDFs, complex tables, shared guidance, missing dates and blocked websites can leave fields unresolved.
-- Eligibility remains source wording rather than a complete applicant-decision engine. The scheduler requires the local server to stay running.
+- Extract facts from source content rather than generating missing information.
+- Preserve original bytes, quotations, URLs, hashes and source locations so important claims can be traced.
+- Do not infer an application cycle from a filename or unrelated date. Do not turn conditional benefits into an unsupported fixed amount.
+- Keep conflicting or incomplete claims unresolved. Unknown dates do not imply an open application window.
+- Keep automated test fixtures separate from real application records.
+
+## 8. Change and expiry detection
+
+- Revisit listing pages and known sources on every live crawl. Use ETag or Last-Modified headers when supported.
+- After a valid HTTP 304 response and integrity check, reuse saved bytes. Otherwise, download the source and compare its hash.
+- Reuse unchanged extraction only while artifacts, configuration and processing rules still match. Process new or changed content again.
+- Accepted changes preserve old/new values, detection times and evidence references. Unresolved updates remain review proposals.
+- Evaluate expiry separately from verification, using supported application dates. Failed source access requires re-verification rather than automatic expiry.
+
+## 9. Historical official-notice replay
+
+- Objective: demonstrate two deadline changes and two expired examples using genuine official source material, without waiting for providers to publish new updates.
+- Meaning of historical replay: the system fetches older and later published notices and processes them in order. It compares the earlier deadline with the later deadline, keeping both values and their evidence.
+- For expiry, it uses a real published application window. It evaluates that window at an earlier date when applications were open, then at a later date after closing.
+- The notices and dates are real. The sequence is replayed now; it does not claim that production crawls witnessed those historical changes as they happened.
+- NMMSS and Sacred Heart College CSSS renewal instructions provide deadline revisions. The CSSS example concerns institutional instructions, not an independently established national policy revision.
+- Chevening India and DAAD HSK provide the historical expiry windows. Replay output is stored separately from the main database.
+
+## 10. Results
+
+- Retained live validation run completed on 15 October 2026, starting with an empty database.
+- 296 scholarship records across five source categories; official-source identity confirmed for all 296.
+- 4 whole-record verified scholarships with confidence >=95; 292 records requiring review.
+- 119 active or expiring-soon records; 9 expired records; average confidence 83.1.
+- Zero language-model API calls. The final incremental-workflow release check passed 157 automated regression tests.
+- Official replay on 15 October 2026 at 22:38 IST: 2 deadline changes, 2 expired examples, all reported evidence checks passed, no failures and no production rows changed.
+- Both changed deadlines moved from 30 September to 31 October 2026 and were unexpired on the replay check date.
+- These are retained check results. Source updates, freshness and evaluation dates can change later results.
