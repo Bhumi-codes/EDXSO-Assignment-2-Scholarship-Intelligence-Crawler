@@ -132,7 +132,7 @@ Configured seeds in `config/seeds.json` are `ffe`, `iit_delhi`, `nsp`, `chevenin
 **Automatic daily crawl** runs at **09:00 IST while the local dashboard server is running**, with a catch-up after a missed schedule. 
 
 ## Project structure
-
+```text
 EDXSO-Assignment-2-Scholarship-Intelligence-Crawler/
 ├── scholarship_intelligence/
 │   ├── __init__.py              # Package metadata
@@ -208,6 +208,7 @@ EDXSO-Assignment-2-Scholarship-Intelligence-Crawler/
 ├── requirements.txt
 ├── uv.lock
 └── README.md
+```
 
 ## Technology stack
 
@@ -237,98 +238,7 @@ The live database is **`data/runtime/scholarships.sqlite3`**. Its schema is [sch
 
   ## Database layout
 
-```mermaid
-erDiagram
-    programmes ||--o{ scholarships : contains
-    scholarships ||--o{ scholarship_sources : links
-    sources ||--o{ scholarship_sources : referenced_by
-    sources ||--o{ source_snapshots : preserves
-    scholarships ||--o{ evidence : supports_fields
-    source_snapshots ||--o{ evidence : provides
-    scholarships ||--o{ changes : records
-
-    programmes {
-        INTEGER programme_id PK
-        TEXT name
-        TEXT provider_name
-    }
-
-    scholarships {
-        INTEGER scholarship_id PK
-        INTEGER programme_id FK
-        TEXT cycle
-        JSON benefit_json
-        JSON eligibility_json
-        TEXT opening_date
-        TEXT closing_date
-        JSON documents_json
-        TEXT selection_process
-        JSON renewal_json
-        TEXT lifecycle_status
-        TEXT verification_status
-        REAL confidence_score
-        JSON verification_details_json
-        TEXT last_verified_at
-        TEXT last_changed_at
-    }
-
-    sources {
-        INTEGER source_id PK
-        TEXT url UK
-        TEXT source_type
-        JSON authenticity_json
-        TEXT last_attempt_at
-        TEXT last_success_at
-        TEXT last_access_result
-    }
-
-    scholarship_sources {
-        INTEGER scholarship_id PK,FK
-        INTEGER source_id PK,FK
-        TEXT role PK
-    }
-
-    source_snapshots {
-        INTEGER snapshot_id PK
-        INTEGER source_id FK
-        TEXT retrieved_at
-        TEXT content_hash
-        TEXT raw_file_path
-        TEXT prepared_content_path
-    }
-
-    evidence {
-        INTEGER evidence_id PK
-        INTEGER scholarship_id FK
-        TEXT field_name
-        INTEGER snapshot_id FK
-        TEXT quote
-        JSON location_json
-        JSON check_result_json
-        INTEGER is_current
-    }
-
-    changes {
-        INTEGER change_id PK
-        INTEGER scholarship_id FK
-        TEXT field_name
-        JSON old_value_json
-        JSON new_value_json
-        TEXT detected_at
-        JSON old_evidence_ids_json
-        JSON new_evidence_ids_json
-        TEXT reason
-    }
-
-    crawl_runs {
-        INTEGER run_id PK
-        TEXT trigger
-        TEXT started_at
-        TEXT finished_at
-        TEXT status
-        JSON summary_json
-    }
-```
+![Database layout](docs/database-layout.png)
 
 **PK:** primary key · **FK:** foreign key · **UK:** unique key.
 
