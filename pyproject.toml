@@ -1,0 +1,16 @@
+[project]
+name = "scholarship-intelligence-python"
+version = "1.1.0"
+description = "An evidence-backed scholarship intelligence crawler for Indian students"
+requires-python = ">=3.11"
+dependencies = [
+    "scrapy>=2.16,<3",
+    "pydantic>=2,<3",
+    "streamlit>=1.50,<2",
+    "pypdf>=6.10,<7",
+    "requests>=2.32,<3",
+    "python-dateutil>=2.9,<3",
+]
+
+[tool.uv]
+package = false

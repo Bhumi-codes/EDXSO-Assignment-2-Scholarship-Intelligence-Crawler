@@ -1,0 +1,133 @@
+{
+  "operation": "clean_release_live_validation",
+  "started_at": "2026-10-15T07:55:49.783590+00:00",
+  "finished_at": "2026-10-15T08:20:23.062978+00:00",
+  "initial_database": "empty",
+  "extraction_method": "python_rules",
+  "model_api_calls": 0,
+  "dashboard_counts": {
+    "stored": 296,
+    "verified": 4,
+    "review_required": 292,
+    "active": 119,
+    "expired": 9,
+    "recently_updated": 0,
+    "average_confidence": 83.05878378378394,
+    "assigned_scores": 296
+  },
+  "official_source_confirmed": 296,
+  "scores_at_least_95": 4,
+  "sources": [
+    {
+      "seed_id": "ffe",
+      "live_crawl_performed": true,
+      "counts": {
+        "stored": 1
+      },
+      "coverage": {
+        "fetched_pages": 1,
+        "successful_pages": 1,
+        "failed_pages": 0,
+        "request_or_snapshot_failures": [],
+        "discovered_detail_urls": 0,
+        "successful_detail_pages": 0,
+        "budget_skipped_count": 0,
+        "budget_skipped_urls": [],
+        "status": "no_budget_backlog",
+        "scope": "Observed crawl links only; this does not establish complete website coverage or current application availability."
+      },
+      "attention": null
+    },
+    {
+      "seed_id": "iit_delhi",
+      "live_crawl_performed": true,
+      "counts": {
+        "stored": 263,
+        "identity_review_required": 3
+      },
+      "coverage": {
+        "fetched_pages": 281,
+        "successful_pages": 281,
+        "failed_pages": 1,
+        "request_or_snapshot_failures": [
+          "https://home.iitd.ac.in/uploads/PROSPECTUS%202026-27.pdf"
+        ],
+        "discovered_detail_urls": 266,
+        "successful_detail_pages": 266,
+        "budget_skipped_count": 0,
+        "budget_skipped_urls": [],
+        "status": "no_budget_backlog",
+        "scope": "Observed crawl links only; this does not establish complete website coverage or current application availability."
+      },
+      "attention": null
+    },
+    {
+      "seed_id": "nsp",
+      "live_crawl_performed": true,
+      "counts": {
+        "stored": 168
+      },
+      "coverage": {
+        "fetched_pages": 244,
+        "successful_pages": 236,
+        "failed_pages": 8,
+        "request_or_snapshot_failures": [],
+        "discovered_detail_urls": 0,
+        "successful_detail_pages": 0,
+        "budget_skipped_count": 0,
+        "budget_skipped_urls": [],
+        "status": "no_budget_backlog",
+        "scope": "Observed crawl links only; this does not establish complete website coverage or current application availability."
+      },
+      "attention": null
+    },
+    {
+      "seed_id": "chevening_india",
+      "live_crawl_performed": true,
+      "counts": {
+        "stored": 1
+      },
+      "coverage": {
+        "fetched_pages": 10,
+        "successful_pages": 6,
+        "failed_pages": 4,
+        "request_or_snapshot_failures": [],
+        "discovered_detail_urls": 0,
+        "successful_detail_pages": 0,
+        "budget_skipped_count": 0,
+        "budget_skipped_urls": [],
+        "status": "no_budget_backlog",
+        "scope": "Observed crawl links only; this does not establish complete website coverage or current application availability."
+      },
+      "attention": null
+    },
+    {
+      "seed_id": "hdfc_ecss",
+      "live_crawl_performed": true,
+      "counts": {
+        "stored": 3
+      },
+      "coverage": {
+        "fetched_pages": 2,
+        "successful_pages": 2,
+        "failed_pages": 0,
+        "request_or_snapshot_failures": [],
+        "discovered_detail_urls": 0,
+        "successful_detail_pages": 0,
+        "budget_skipped_count": 0,
+        "budget_skipped_urls": [],
+        "status": "no_budget_backlog",
+        "scope": "Observed crawl links only; this does not establish complete website coverage or current application availability."
+      },
+      "attention": null
+    }
+  ],
+  "tests": {
+    "run": 131,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "sqlite_integrity_check": "ok",
+  "foreign_key_violations": 0
+}

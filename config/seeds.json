@@ -1,0 +1,113 @@
+{
+  "seeds": [
+    {
+      "seed_id": "ffe",
+      "label": "Foundation for Excellence",
+      "start_url": "https://ffe.org/scholarships/",
+      "source_category": "ngo_trust",
+      "allowed_hosts": [
+        "ffe.org",
+        "www.ffe.org"
+      ],
+      "provider_name": "Foundation For Excellence",
+      "extraction_profile": "official_sections_v1",
+      "workflow": {
+        "entry_is_offering": true
+      },
+      "crawl_patterns": [
+        "/scholarships/?"
+      ],
+      "live_workflow": true
+    },
+    {
+      "seed_id": "iit_delhi",
+      "label": "IIT Delhi Scholarships and Awards",
+      "start_url": "https://alumni.iitd.ac.in/scholarships-awards",
+      "source_category": "university",
+      "allowed_hosts": [
+        "alumni.iitd.ac.in",
+        "academics.iitd.ac.in",
+        "home.iitd.ac.in"
+      ],
+      "context_urls": [
+        "https://academics.iitd.ac.in/faqs/",
+        "https://home.iitd.ac.in/uploads/PROSPECTUS%202026-27.pdf"
+      ],
+      "provider_name": "IIT Delhi",
+      "extraction_profile": "iit_alumni_v1",
+      "live_workflow": true
+    },
+    {
+      "seed_id": "nsp",
+      "label": "National Scholarship Portal",
+      "start_url": "https://scholarships.gov.in/All-Scholarships",
+      "source_category": "government",
+      "allowed_hosts": [
+        "scholarships.gov.in",
+        "www.scholarships.gov.in"
+      ],
+      "extraction_profile": "nsp_cards_v1",
+      "date_order": "DMY",
+      "workflow": {
+        "cards": true
+      },
+      "crawl_patterns": [
+        "/All-Scholarships/?",
+        "/public/(?:schemeGuidelines|FAQ)/.*"
+      ],
+      "live_workflow": true
+    },
+    {
+      "seed_id": "chevening_india",
+      "label": "Chevening Scholarships for India",
+      "start_url": "https://www.chevening.org/scholarship/india/",
+      "source_category": "international",
+      "allowed_hosts": [
+        "www.chevening.org",
+        "chevening.org"
+      ],
+      "provider_name": "Chevening",
+      "extraction_profile": "official_sections_v1",
+      "workflow": {
+        "entry_is_offering": true
+      },
+      "live_workflow": true,
+      "support_urls": [
+        "https://www.chevening.org/scholarships/application-timeline/",
+        "https://www.chevening.org/resource-hub/guidance/eligibility/",
+        "https://www.chevening.org/scholarships/who-can-apply/",
+        "https://www.chevening.org/faqs/what-does-a-chevening-scholarship-cover/"
+      ],
+      "crawl_patterns": [
+        "/scholarship/india/?",
+        "/scholarships/(?:application-timeline|who-can-apply|what-is-included)/?",
+        "/resource-hub/guidance/(?:eligibility|work-experience|documents|application-criteria)/?",
+        "/eligibility/?",
+        "/faqs/what-does-a-chevening-scholarship-cover/?"
+      ]
+    },
+    {
+      "seed_id": "hdfc_ecss",
+      "label": "HDFC Bank Parivartan ECSS",
+      "start_url": "https://www.parivartanecss.com/",
+      "source_category": "corporate_csr",
+      "provider_name": "HDFC Bank",
+      "allowed_hosts": [
+        "www.parivartanecss.com",
+        "parivartanecss.com"
+      ],
+      "application_hosts": [
+        "forms.buddy4study.com"
+      ],
+      "extraction_profile": "hdfc_cards_v1",
+      "date_order": "DMY",
+      "workflow": {
+        "cards": true
+      },
+      "crawl_patterns": [
+        "/(?:index.html)?"
+      ],
+      "live_workflow": true
+    }
+  ]
+}

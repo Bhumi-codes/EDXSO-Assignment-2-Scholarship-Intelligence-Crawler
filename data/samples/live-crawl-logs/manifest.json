@@ -1,0 +1,52 @@
+{
+  "description": "Unmodified genuine HTTP event logs from a fresh empty-database run. No manual facts, model calls or simulated records. The saved-results archive retains snapshots referenced by stored records; unreferenced downloads are omitted. New live checks retain their own event logs and source bytes.",
+  "started_at": "2026-10-15T07:55:49.783590+00:00",
+  "finished_at": "2026-10-15T08:20:23.062978+00:00",
+  "sources": [
+    {
+      "seed_id": "ffe",
+      "log": "ffe.jsonl",
+      "original_file": "data/runtime/pilot-20261015T075550Z-37e34233.jsonl",
+      "sha256": "986c5bf9bb1964d7ed0c147260973f2e505ff83962cc308f6650b6a7411c7831",
+      "event_count": 11,
+      "fetched_events": 1,
+      "live_crawl_performed": true
+    },
+    {
+      "seed_id": "iit_delhi",
+      "log": "iit_delhi.jsonl",
+      "original_file": "data/runtime/pilot-20261015T075553Z-935c11b3.jsonl",
+      "sha256": "11996184c89d0726edb49c60b28254cf3506ddf7bf6bddf0292f397694f71489",
+      "event_count": 3222,
+      "fetched_events": 281,
+      "live_crawl_performed": true
+    },
+    {
+      "seed_id": "nsp",
+      "log": "nsp.jsonl",
+      "original_file": "data/runtime/pilot-20261015T080457Z-c5454b88.jsonl",
+      "sha256": "ef4d1c599ee046bd1bd844d8f29cd674ab7d40208af49e2155c2f711c2bb40b1",
+      "event_count": 1661,
+      "fetched_events": 244,
+      "live_crawl_performed": true
+    },
+    {
+      "seed_id": "chevening_india",
+      "log": "chevening_india.jsonl",
+      "original_file": "data/runtime/pilot-20261015T081942Z-4299b3ae.jsonl",
+      "sha256": "9fc8d6fb5fd2aeb89b0e404345cdc6e32bc434c2f31a961c9f57af26fc47e4c0",
+      "event_count": 93,
+      "fetched_events": 10,
+      "live_crawl_performed": true
+    },
+    {
+      "seed_id": "hdfc_ecss",
+      "log": "hdfc_ecss.jsonl",
+      "original_file": "data/runtime/pilot-20261015T082008Z-47a8f01d.jsonl",
+      "sha256": "1ef8e26c780c313a750a14021bcad2002653b06499ce08e8599238e5041dcdfc",
+      "event_count": 8,
+      "fetched_events": 2,
+      "live_crawl_performed": true
+    }
+  ]
+}

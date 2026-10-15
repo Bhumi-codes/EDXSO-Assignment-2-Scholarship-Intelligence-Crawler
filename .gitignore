@@ -1,0 +1,35 @@
+# Local virtual environment
+.venv/
+.venv-*/
+.dependency-cache/
+.installer-temp/
+
+# Python caches and build output
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+build/
+dist/
+*.egg-info/
+
+# Secrets; keep the example configuration trackable
+.env
+.env.*
+!.env.example
+
+# Local editor settings
+.vscode/
+.idea/
+
+# Temporary working files and logs
+work/
+*.log
+
+# Runtime data; submission samples will be stored separately
+data/runtime/
+test-results.txt
+tests/*-test-*/
+tests/python-workflow-*/
+tests/workflow-controls-*/
+tests/cli-test-*/

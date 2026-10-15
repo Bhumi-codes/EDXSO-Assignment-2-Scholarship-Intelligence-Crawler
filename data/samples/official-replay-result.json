@@ -1,0 +1,281 @@
+{
+  "operation": "historical_official_notice_replay",
+  "simulated": false,
+  "live_change_observed": false,
+  "scope": "Genuine preserved official-notice revisions replayed in order; Chevening and DAAD historical ACTIVE-to-EXPIRED window evaluation from freshly fetched official notices. Deadline-only demonstration, not whole-record verification.",
+  "changed_examples": 2,
+  "expired_examples": 2,
+  "target_met": true,
+  "changes": [
+    {
+      "name": "National Means-cum-Merit Scholarship Scheme",
+      "cycle": "2026-27",
+      "route": "NSP student submission",
+      "field": "closing_date",
+      "old_value": "2026-09-30",
+      "new_value": "2026-10-31",
+      "detected_at": "2026-10-15T22:38:36.384660+05:30",
+      "evidence": {
+        "old": {
+          "quote": "extended to September 30, 2026",
+          "source_url": "https://www.pib.gov.in/newsite/erelcontent.aspx?lang=2&reg=48&relid=294184",
+          "snapshot_id": "c17e6df00db15536a8ae85b9ef52a24459f6806112aaf7afac7d26d7a6bf326a",
+          "block_id": "b000003",
+          "page_number": null,
+          "source_xpath": "/html/body/form/div/div[2]/div[2]/p[1]",
+          "source_context": "The last date for submission of applications by selected meritorious students on the National Scholarship Portal (NSP) for National Means cum Merit Scholarship Scheme (NMMSS) for 2026-27 has been extended to September 30, 2026. The extended timeline is as follows:",
+          "extraction_method": "html",
+          "evidence_validation": {
+            "bundle_id": "a7b1f58eafe8b874578d8a412af4a4535aa1ce38dc3255dd03e552dc12b9f27c",
+            "documents_checked": 1,
+            "evidence_checked": 5,
+            "exact_quote_matches": 5,
+            "url_claims_checked": 1,
+            "issues": [],
+            "validator_version": "evidence-validator-v4"
+          }
+        },
+        "new": {
+          "quote": "Extended to October 31, 2026",
+          "source_url": "https://www.pib.gov.in/PressReleaseIframePage.aspx?PRID=2317657&lang=2&reg=48",
+          "snapshot_id": "05f62c048c9cd745de993c42a0b130fa7eb15c736790af6dddd0c4744729a958",
+          "block_id": "b000003",
+          "page_number": null,
+          "source_xpath": "/html/body/form/div[2]/div[2]/div[3]/h1",
+          "source_context": "NMMSS Scholarship Application Deadline Extended to October 31, 2026",
+          "extraction_method": "html",
+          "evidence_validation": {
+            "bundle_id": "890faf1e0de98b781301626018b31fe2ed907d4aed35a27ea8e2fa29aa04b648",
+            "documents_checked": 1,
+            "evidence_checked": 5,
+            "exact_quote_matches": 5,
+            "url_claims_checked": 1,
+            "issues": [],
+            "validator_version": "evidence-validator-v4"
+          }
+        },
+        "old_receipt": {
+          "source_url": "https://www.pib.gov.in/newsite/erelcontent.aspx?lang=2&reg=48&relid=294184",
+          "response_url": "https://www.pib.gov.in/newsite/erelcontent.aspx?lang=2&reg=48&relid=294184",
+          "http_status": 200,
+          "retrieved_at": "2026-10-15T17:08:37.400818+00:00",
+          "content_hash": "38e63a2d5903d5a139ff6fcc5eca0ebdeec9dde8d38de44184ef2567f9de7529",
+          "raw_file_path": "data/runtime/snapshots/raw/0c28231e5814128887c9ef128e55f439cdd425869fa25ec00d35cc2ad68800de/38e63a2d5903d5a139ff6fcc5eca0ebdeec9dde8d38de44184ef2567f9de7529.bin"
+        },
+        "new_receipt": {
+          "source_url": "https://www.pib.gov.in/PressReleaseIframePage.aspx?PRID=2317657&lang=2&reg=48",
+          "response_url": "https://www.pib.gov.in/PressReleaseIframePage.aspx?PRID=2317657&lang=2&reg=48",
+          "http_status": 200,
+          "retrieved_at": "2026-10-15T17:08:37.757874+00:00",
+          "content_hash": "a618db481c7930623f640e2f4c4c50619d2a196351ebac06619950e1e01a4692",
+          "raw_file_path": "data/runtime/snapshots/raw/5f072880ae0d119e168bea746d79e67a78c75cf6c8cf435cb6faccc76d68b29a/a618db481c7930623f640e2f4c4c50619d2a196351ebac06619950e1e01a4692.bin"
+        },
+        "notice_order": [
+          "2026-09-01",
+          "2026-10-01"
+        ],
+        "notice_order_basis": "Official preserved notice URLs and explicit extension wording; not crawl timestamps.",
+        "scope": "Official ministry notices for the same student application round."
+      },
+      "candidates": [
+        "data/runtime/official-notice-replay/run-a1d14e599d854ef7a142f2935d483111/candidates/nmmss-1.json",
+        "data/runtime/official-notice-replay/run-a1d14e599d854ef7a142f2935d483111/candidates/nmmss-2.json"
+      ],
+      "evidence_checks_passed": true,
+      "change_status": "changed",
+      "current_deadline_status": "not expired",
+      "checked_at": "2026-10-15T22:38:36.384660+05:30"
+    },
+    {
+      "name": "Central Sector Scheme of Scholarships (CSSS) - renewal",
+      "cycle": "2026-27",
+      "route": "CSSS renewal - student submission per Sacred Heart College notices",
+      "field": "closing_date",
+      "old_value": "2026-09-30",
+      "new_value": "2026-10-31",
+      "detected_at": "2026-10-15T22:38:36.384660+05:30",
+      "evidence": {
+        "old": {
+          "quote": "student application open till 30th\nSeptember 2026",
+          "source_url": "https://www.shcollege.ac.in/wp-content/uploads/Renewal-Applications-Open-for-Central-Sector-Scheme-of-Scholarships-2026–2027-1.pdf",
+          "snapshot_id": "95c485491d7714125475d755bd18391b7b9a9f8004b3d297c1cd51fa369e5a1b",
+          "block_id": "p000001",
+          "page_number": 1,
+          "source_xpath": null,
+          "source_context": "SACRED\nHEART\nCOLLEGE\nThevara, Kochi 682013, Kerala, India, Tel: 0484-2663380, 2870500, 2870504\nEmail: office@shcollege.ac.in; www.shcollege.ac.in\nSHC/OFFICE/689/2026-27\nNOTICE\nDate : 28-09-2026\nSubject : RENEWAL OF NSP CENTRAL SECTOR SCHEME FOR COLLEGE AND\nUNIVERSITY STUDENTS LAST DATE 30TH SEP 2026\nAttention Students:\nKindly note the Applications for RENEWAL of Central Sector Scheme of Scholarship For College\nAnd University Students (CSSS) (Merit Based Scheme) for student application open till 30th\nSeptember 2026 . Kindly submit the online applications at earliest on or before 30th September in\nNSP portal and submit the hardcopy to scholorship counter on same day. Please note the students not\nable to submit the online applications after 30th September.Please do at earliest..\nDI. Franklin.\nD.D.O & Principal in Charge\nSacred Heart college\nThevara,\nCollege with Potential for Excellence (UGC) & kcredfted at level by NMC",
+          "extraction_method": "windows_ocr",
+          "scope": "Revision in official institutional renewal instructions. Earlier notice dated 28 September supersedes older appendices; not an independently established national policy revision.",
+          "evidence_validation": {
+            "bundle_id": "2ff8e2de35510b1f49af28ca9955c3ddd46237619b1dc1e915782c036467d36d",
+            "documents_checked": 1,
+            "evidence_checked": 5,
+            "exact_quote_matches": 5,
+            "url_claims_checked": 1,
+            "issues": [],
+            "validator_version": "evidence-validator-v4"
+          }
+        },
+        "new": {
+          "quote": "has been extended to 31st October 2026",
+          "source_url": "https://www.shcollege.ac.in/news/extended-deadline-nsp-central-sector-scholarship-renewal-applications-31-october-2026/",
+          "snapshot_id": "f49d9e69438ce39acf9d9d9dd9592a3cb9cf55e2548710cb49a27ec79b909985",
+          "block_id": "b000007",
+          "page_number": null,
+          "source_xpath": "/html/body/main/div/div[3]/section[1]/div/div[2]/p[1]",
+          "source_context": "Attention Students:\nKindly note the last date for submission of renewal applications under NSP - Central Sector Scheme of Scholarship For College And University Students (CSSS) (Merit Based Scheme) has been extended to 31st October 2026. Students who have not yet submitted their renewal applications are instructed to complete the application and submit within the extended deadline and ensure to submit a hard copy of the documents to the scholarship section on the same date.",
+          "extraction_method": "html",
+          "scope": "Revision in official institutional renewal instructions. Earlier notice dated 28 September supersedes older appendices; not an independently established national policy revision.",
+          "evidence_validation": {
+            "bundle_id": "cce970708d42fa86ea75067cf286e889fe89f1360b5c7121a716afc12c555def",
+            "documents_checked": 1,
+            "evidence_checked": 5,
+            "exact_quote_matches": 5,
+            "url_claims_checked": 1,
+            "issues": [],
+            "validator_version": "evidence-validator-v4"
+          }
+        },
+        "old_receipt": {
+          "source_url": "https://www.shcollege.ac.in/wp-content/uploads/Renewal-Applications-Open-for-Central-Sector-Scheme-of-Scholarships-2026–2027-1.pdf",
+          "response_url": "https://www.shcollege.ac.in/wp-content/uploads/Renewal-Applications-Open-for-Central-Sector-Scheme-of-Scholarships-2026%E2%80%932027-1.pdf",
+          "http_status": 200,
+          "retrieved_at": "2026-10-15T17:08:41.849459+00:00",
+          "content_hash": "b3a2b5f74e28d5e28f9df95831ff6db0c87621d8bb3aba7cbf4f50dd0e083752",
+          "raw_file_path": "data/runtime/snapshots/raw/ec4f3b362c100a32d801dd701d14072b0315050eb65382e963eac996fa79e9a5/b3a2b5f74e28d5e28f9df95831ff6db0c87621d8bb3aba7cbf4f50dd0e083752.bin"
+        },
+        "new_receipt": {
+          "source_url": "https://www.shcollege.ac.in/news/extended-deadline-nsp-central-sector-scholarship-renewal-applications-31-october-2026/",
+          "response_url": "https://www.shcollege.ac.in/news/extended-deadline-nsp-central-sector-scholarship-renewal-applications-31-october-2026/",
+          "http_status": 200,
+          "retrieved_at": "2026-10-15T17:08:49.464928+00:00",
+          "content_hash": "6da1fcb4a8ce1c0684cb2e684881d5f9f3413ec3461a36a1ed8cdb1208a9ed95",
+          "raw_file_path": "data/runtime/snapshots/raw/78de0b29eff357d7b42e23c9d016508c5112d99f83e72a7271456bf2d9e2baaa/6da1fcb4a8ce1c0684cb2e684881d5f9f3413ec3461a36a1ed8cdb1208a9ed95.bin"
+        },
+        "notice_order": [
+          "2026-09-28",
+          "2026-10-13"
+        ],
+        "notice_order_basis": "Official preserved notice URLs and explicit extension wording; not crawl timestamps.",
+        "scope": "Revision in official institutional renewal instructions. Earlier notice dated 28 September supersedes older appendices; not an independently established national policy revision."
+      },
+      "candidates": [
+        "data/runtime/official-notice-replay/run-a1d14e599d854ef7a142f2935d483111/candidates/csss_renewal-1.json",
+        "data/runtime/official-notice-replay/run-a1d14e599d854ef7a142f2935d483111/candidates/csss_renewal-2.json"
+      ],
+      "evidence_checks_passed": true,
+      "change_status": "changed",
+      "current_deadline_status": "not expired",
+      "checked_at": "2026-10-15T22:38:36.384660+05:30"
+    }
+  ],
+  "expired": [
+    {
+      "name": "Chevening Scholarship - India",
+      "cycle": "2025 application round",
+      "route": "Indian citizens - Chevening Scholarship application",
+      "opening_date": "2025-08-05",
+      "closing_date": "2025-10-07",
+      "old_value": "ACTIVE",
+      "new_value": "EXPIRED",
+      "lifecycle_status": "EXPIRED",
+      "historical_as_of": "2025-08-06",
+      "checked_at": "2026-10-15T22:38:36.384660+05:30",
+      "source_values_changed": false,
+      "evaluation_method": "historical_window_lifecycle_replay",
+      "evidence": {
+        "source": {
+          "quote": "will open from 5 August to 7 October 2025",
+          "source_url": "https://www.gov.uk/government/news/applications-open-for-chevening-scholarships-to-study-in-the-uk",
+          "snapshot_id": "78e371423fa741784cd5009dd7a7c98178fa38e82099b402a389336a10a87958",
+          "block_id": "b000012",
+          "page_number": null,
+          "source_xpath": "/html/body/div[2]/main/div[1]/div[2]/p",
+          "source_context": "The application window for the UK Government’s flagship international scholarships and fellowships programme will open from 5 August to 7 October 2025.",
+          "extraction_method": "html",
+          "opening_evidence": {
+            "quote": "will open from 5 August to 7 October 2025",
+            "source_url": "https://www.gov.uk/government/news/applications-open-for-chevening-scholarships-to-study-in-the-uk",
+            "snapshot_id": "78e371423fa741784cd5009dd7a7c98178fa38e82099b402a389336a10a87958",
+            "block_id": "b000012",
+            "page_number": null,
+            "source_xpath": "/html/body/div[2]/main/div[1]/div[2]/p",
+            "source_context": "The application window for the UK Government’s flagship international scholarships and fellowships programme will open from 5 August to 7 October 2025.",
+            "extraction_method": "html"
+          },
+          "evidence_validation": {
+            "bundle_id": "5c3007d6fa5f1828a4cea5abb98e5b7bd2eb9c7ba06e8451ffbc76339d4bafe5",
+            "documents_checked": 1,
+            "evidence_checked": 6,
+            "exact_quote_matches": 6,
+            "url_claims_checked": 1,
+            "issues": [],
+            "validator_version": "evidence-validator-v4"
+          }
+        },
+        "historical_as_of": "2025-08-06",
+        "current_as_of": "2026-10-15T22:38:36.384660+05:30",
+        "basis": "Historical lifecycle evaluation of the same official window. No earlier live crawl is claimed; source dates remain unchanged."
+      },
+      "candidate": "data/runtime/official-notice-replay/run-a1d14e599d854ef7a142f2935d483111/candidates/chevening_expiry-1.json",
+      "evidence_checks_passed": true
+    },
+    {
+      "name": "DAAD HSK University Summer Courses Scholarship",
+      "cycle": "2025-2026",
+      "route": "DAAD HSK student scholarship application - India announcement",
+      "opening_date": "2025-09-01",
+      "closing_date": "2025-10-30",
+      "old_value": "ACTIVE",
+      "new_value": "EXPIRED",
+      "lifecycle_status": "EXPIRED",
+      "historical_as_of": "2025-09-02",
+      "checked_at": "2026-10-15T22:38:36.384660+05:30",
+      "source_values_changed": false,
+      "evaluation_method": "historical_window_lifecycle_replay",
+      "evidence": {
+        "source": {
+          "quote": "Application Deadline: 30 October 2025",
+          "source_url": "https://www.daad.in/en/2025/08/29/daad-hsk-scholarship-2025-2026-applications-now-open/",
+          "snapshot_id": "18e726c17e618c7ad137ee898ec21fde9f56bbb71fbbff98b7af89b10bb42572",
+          "block_id": "b000018",
+          "page_number": null,
+          "source_xpath": "/html/body/div[3]/div[1]/div[1]/main/article/div[1]/div[1]/p[2]",
+          "source_context": "Portal opens: 1 September 2025\nApplication Deadline: 30 October 2025",
+          "extraction_method": "html",
+          "opening_evidence": {
+            "quote": "Portal opens: 1 September 2025",
+            "source_url": "https://www.daad.in/en/2025/08/29/daad-hsk-scholarship-2025-2026-applications-now-open/",
+            "snapshot_id": "18e726c17e618c7ad137ee898ec21fde9f56bbb71fbbff98b7af89b10bb42572",
+            "block_id": "b000018",
+            "page_number": null,
+            "source_xpath": "/html/body/div[3]/div[1]/div[1]/main/article/div[1]/div[1]/p[2]",
+            "source_context": "Portal opens: 1 September 2025\nApplication Deadline: 30 October 2025",
+            "extraction_method": "html"
+          },
+          "evidence_validation": {
+            "bundle_id": "dc6686d8cab05b79f744e375cf7fc7bb43e45b1e55abba6d3581264d5f48fb20",
+            "documents_checked": 1,
+            "evidence_checked": 6,
+            "exact_quote_matches": 6,
+            "url_claims_checked": 1,
+            "issues": [],
+            "validator_version": "evidence-validator-v4"
+          }
+        },
+        "historical_as_of": "2025-09-02",
+        "current_as_of": "2026-10-15T22:38:36.384660+05:30",
+        "basis": "Historical lifecycle evaluation of the same official window. No earlier live crawl is claimed; source dates remain unchanged."
+      },
+      "candidate": "data/runtime/official-notice-replay/run-a1d14e599d854ef7a142f2935d483111/candidates/daad_hsk_expiry-1.json",
+      "evidence_checks_passed": true
+    }
+  ],
+  "failures": [],
+  "production_database_rows_changed": 0,
+  "api_calls_made": 0,
+  "checked_at": "2026-10-15T22:38:36.384660+05:30",
+  "replay_directory": "data/runtime/official-notice-replay/run-a1d14e599d854ef7a142f2935d483111",
+  "result_file": "data/runtime/official-notice-replay/run-a1d14e599d854ef7a142f2935d483111/result.json",
+  "database": "data/runtime/official-notice-replay/run-a1d14e599d854ef7a142f2935d483111/replay.sqlite3",
+  "change_selection_policy": "Only revisions whose later student deadline is after the actual check date qualify. CBSE 2025 is excluded from current selection; previous reports are preserved."
+}
