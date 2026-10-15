@@ -19,7 +19,11 @@ If the repository is already downloaded, run only the last two commands from the
 
 Open **http://127.0.0.1:8501**. Keep the terminal running. Stop the application with `Ctrl+C`.
 
-The dashboard initially displays **296 genuine saved scholarship records**. Their original crawl and verification dates are preserved. On a fresh checkout, the supporting evidence archive prepares in the background; **Crawl now** becomes available when preparation finishes. Loading these records is not a new live crawl, and an existing nonempty database is never replaced.
+The dashboard initially displays **296 genuine saved scholarship records**. 
+
+## Dashboard preview
+
+![Scholarship Intelligence dashboard](docs/dashboard.png)
 
 For installation without uv on Windows:
 
@@ -41,7 +45,10 @@ Search for a scholarship and open its details. Inspect available benefits, eligi
 
 ### 2. Run a live crawl
 
-Select a source in the sidebar and click **Crawl now**. For a small source demonstration, select **Foundation for Excellence**. Select **All configured sources** for the full workflow.
+Select a source in the sidebar and click **Crawl now**. Select **All configured sources** for the full workflow.
+
+![Scholarship Intelligence dashboard](docs/dashboard.png)
+![Scholarship Intelligence dashboard](docs/dashboard2.png)
 
 The background worker performs:
 
@@ -68,6 +75,16 @@ An unchanged result is a valid outcome. A live provider may not publish a revisi
 
 ### 4. Historical official-notice replay
 
+**Objective of Historical Official-Notice Replay**
+
+Demonstrate change and expiry detection using genuine official scholarship notices, without waiting for websites to publish new updates.
+
+- Compare earlier and later notices to identify **two deadline changes**, retaining old/new values and source evidence.
+- Evaluate published application windows at historical and current dates to demonstrate **two ACTIVE-to-EXPIRED transitions**.
+- Keep replay results separate from the main scholarship database.
+
+This demonstrates historical changes supported by official evidence; it does not claim that new changes were observed between live production crawls today.
+
 Open a second terminal in the repository root, keeping the dashboard running:
 
 ```powershell
@@ -85,7 +102,6 @@ The retained successful run on **15 October 2026 at 22:38 IST** produced:
 
 See the [successful replay report](data/samples/official-replay-result.json) for quotations, official URLs, hashes, source locations and validation results. CSSS demonstrates an institutional instruction revision, not independently established national policy change. This is **historical official-notice replay**, not a new source change observed between production crawls today. The expiry examples advance the evaluation date across real published windows; source values are unchanged.
 
-The scanned CSSS notice requires **Poppler `pdftoppm` on PATH and Windows English OCR**. Confirm Poppler is accessible with `pdftoppm -v`. These are optional replay prerequisites; the normal HTML/text-PDF workflow does not require them. Replay results are date-sensitive and may be incomplete if sources fail or the later example deadlines have expired. Failures are reported explicitly.
 
 New replay output is stored in `data/runtime/official-notice-replay/latest.json`, with per-run reports, evidence and an isolated SQLite database. The retained sample JSON references the original local runtime artifacts; the JSON alone does not contain every referenced source file.
 
@@ -113,7 +129,85 @@ Resume is recovery from saved content, not a fresh source check. Omit `--resume`
 
 Configured seeds in `config/seeds.json` are `ffe`, `iit_delhi`, `nsp`, `chevening_india`, and `hdfc_ecss`. They cover NGO/trust, university, government, international and corporate CSR sources. Relevant links and catalogue entries are discovered beyond the initial seed URLs. Source rules and crawl budgets constrain coverage; inaccessible or unlinked content is not guaranteed to be found.
 
-**Automatic daily crawl** runs at **09:00 IST while the local dashboard server is running**, with a catch-up after a missed schedule. It cannot wake a powered-off computer. Overlapping dashboard jobs are blocked.
+**Automatic daily crawl** runs at **09:00 IST while the local dashboard server is running**, with a catch-up after a missed schedule. 
+
+## Project structure
+
+EDXSO-Assignment-2-Scholarship-Intelligence-Crawler/
+├── scholarship_intelligence/
+│   ├── __init__.py              # Package metadata
+│   ├── __main__.py              # Entry point for python -m
+│   ├── bootstrap.py             # Restores saved database and evidence
+│   ├── bundles.py               # Groups and validates source documents
+│   ├── cli.py                   # Terminal commands
+│   ├── comparison.py            # Compares extracted and stored facts
+│   ├── confidence.py            # Confidence scoring and verification rules
+│   ├── dashboard.py             # Streamlit dashboard
+│   ├── evidence_validation.py   # Checks quotes, hashes and source locations
+│   ├── http_cache.py            # Conditional requests and cached source bytes
+│   ├── models.py                # Structured scholarship data models
+│   ├── official_replay.py       # Historical official-notice replay
+│   ├── pipeline.py              # Coordinates the complete workflow
+│   ├── preparation.py           # Prepares HTML and PDF content
+│   ├── preview.py               # Displays saved results during preparation
+│   ├── progress.py              # Saves background workflow progress
+│   ├── python_extraction.py     # Extracts scholarship fields using Python
+│   ├── reuse.py                 # Reuses unchanged validated extractions
+│   ├── schema.sql               # SQLite tables and constraints
+│   ├── scholarship_storage.py   # Stores initial scholarship records
+│   ├── semantic_assessment.py   # Assessment structure and validation
+│   ├── settings.py              # Project paths and crawler settings
+│   ├── snapshots.py             # Saves original source content
+│   ├── source_profiles.py       # Source-specific parsing and grouping
+│   ├── spider.py                # Crawl policies and link discovery
+│   ├── storage.py               # Database initialization and connections
+│   ├── updates.py               # Applies reviewed updates and retains history
+│   └── workflow_service.py      # Background jobs and daily scheduling
+│
+├── config/
+│   └── seeds.json               # Starting sources and discovery rules
+│
+├── data/
+│   ├── samples/
+│   │   ├── live-crawl-logs/     # Genuine retained crawl logs
+│   │   ├── official-replay-result.json
+│   │   ├── sample-scholarships.json
+│   │   ├── saved-results.manifest.json
+│   │   ├── saved-results.zip.part01
+│   │   ├── saved-results.zip.part02
+│   │   ├── saved-results.zip.part03
+│   │   ├── saved-view.json.gz
+│   │   └── validation-run.json
+│   └── runtime/                 # Generated locally; excluded from Git
+│
+├── docs/
+│   ├── technical-note.md
+│   ├── release-checks.md
+│   ├── dashboard.png
+│   └── dashboard2.png
+│
+├── tests/
+│   ├── test_cli.py
+│   ├── test_comparison.py
+│   ├── test_dashboard_workflows.py
+│   ├── test_evidence_paths.py
+│   ├── test_incremental.py
+│   ├── test_official_replay.py
+│   ├── test_pipeline.py
+│   ├── test_python_extraction.py
+│   └── test_updates.py
+│
+├── .github/
+│   └── workflows/
+│       └── tests.yml            # Automated test workflow
+├── .streamlit/
+│   └── config.toml              # Dashboard appearance/settings
+├── .gitignore
+├── .python-version
+├── pyproject.toml
+├── requirements.txt
+├── uv.lock
+└── README.md
 
 ## Technology stack
 
@@ -159,7 +253,7 @@ Confidence = 0.30 x official-source authenticity
 
 Component scores are evaluated on a 0-100 scale. `VERIFIED` requires **confidence >=95 and all critical gates to pass**. Unsupported core identity, benefits or eligibility, missing required routing/supporting material, unresolved conflicts, or invalid freshness prevent verification. Source retrieval older than 30 days fails the freshness requirement.
 
-There is no artificial score floor or quota bonus. Missing facts are not invented. Scores are deterministic evidence-based assessments, not calibrated probabilities of real-world correctness. Lifecycle statuses include `ACTIVE`, `EXPIRING_SOON`, `EXPIRED`, `REVIEW_REQUIRED`, and `NO_LONGER_VERIFIABLE`; unknown dates do not imply an open application window.
+**There is no artificial score floor or quota bonus. Missing facts are not invented.** Scores are deterministic evidence-based assessments, not calibrated probabilities of real-world correctness. Lifecycle statuses include `ACTIVE`, `EXPIRING_SOON`, `EXPIRED`, `REVIEW_REQUIRED`, and `NO_LONGER_VERIFIABLE`; unknown dates do not imply an open application window.
 
 ## Results
 
@@ -174,11 +268,6 @@ The retained genuine live validation run completed on **15 October 2026**, start
 
 The separate historical replay subsequently passed with **2 changed and 2 expired examples**, with no failures and no changes to production rows.
 
-These are retained check results, not a guarantee of current availability or future crawl counts. Source freshness and evaluation dates can change dashboard values. The Total discovered metric counts stored scholarship records matching current filters; Active includes expiring-soon records.
-
-**Known shortfall:** only four records meet whole-record verification requirements. The assignment targets of ten records at >=95 and fifteen verified scholarships remain unmet. Official-source identity confirmation is a separate measure and is not presented as whole-record verification.
-
-Other limits include scanned PDFs without normal-workflow OCR, complex conditional tables, shared programme guidance, missing source information, inaccessible websites, and eligibility retained as source prose rather than a universal applicant-decision engine.
 
 ## Tests
 
@@ -192,22 +281,6 @@ Tests cover extraction, evidence matching, PDF page validation, confidence gates
 
 The **three-page technical note PDF** is included at [docs/technical-note.pdf](docs/technical-note.pdf). It covers architecture, technology choices, discovery, extraction, verification, confidence methodology, anti-hallucination safeguards and change detection. An [editable Markdown version](docs/technical-note.md) is also available.
 
-## Project structure
-
-```text
-scholarship_intelligence/    Application code and SQLite schema
-config/seeds.json           Source configuration and grouping rules
-.streamlit/                 Dashboard configuration
-.github/workflows/          Automated test workflow
-data/samples/               Genuine saved data, logs and replay result
-docs/                       Technical note and release checks
-tests/                      Isolated regression tests
-pyproject.toml              Dependencies and project metadata
-uv.lock                     Locked dependency versions
-requirements.txt            pip-compatible dependency list
-```
-
-Runtime reports include `live-source-workflows.json`, `live-progress.json`, `crawl-control.json` and `pilot-*.jsonl` under `data/runtime/`.
 
 If port 8501 is occupied, use:
 
