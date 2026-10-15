@@ -48,6 +48,7 @@ Search for a scholarship and open its details. Inspect available benefits, eligi
 Select a source in the sidebar and click **Crawl now**. Select **All configured sources** for the full workflow.
 
 ![Scholarship Intelligence dashboard](docs/dashboard.png)
+
 ![Scholarship Intelligence dashboard](docs/dashboard2.png)
 
 The background worker performs:
@@ -273,7 +274,6 @@ The retained genuine live validation run completed on **15 October 2026**, start
 - **119 active or expiring-soon**, and **9 expired**.
 - **83.1 average confidence**, rounded from 83.0588.
 - **Five source categories** and **zero model/API calls**.
-- **157 automated regression tests passed** in the final incremental-workflow release check.
 
 The separate historical replay subsequently passed with **2 changed and 2 expired examples**, with no failures and no changes to production rows.
 
@@ -296,3 +296,17 @@ If port 8501 is occupied, use:
 ```powershell
 uv run python -m scholarship_intelligence start --no-crawl --port 8502
 ```
+
+## Limitations
+
+- **Verification targets remain unmet:** All records are primary source verified but 4 records achieved whole-record verification with confidence ≥95%. This falls short of the required 10 records scoring ≥95%. 
+
+- **Historical replay has a limited scope:** The two deadline changes and two expiry examples use genuine official notices and published windows. They do not demonstrate newly observed changes between two live production crawls.
+
+- **PDF extraction has limits:** The normal workflow supports text PDFs. Scanned PDFs and complex tables may need additional processing; scanned-notice handling is implemented only for the separate replay.
+
+- **Website coverage is not guaranteed:** Discovery depends on accessible links, configured source rules and crawl budgets. Blocked pages, JavaScript-only content and website layout changes can prevent extraction.
+
+- **Automation requires the application to stay running:** Daily crawling works while the local dashboard server is active. It does not run when the computer or application is switched off.
+
+- **Live updates can take time:** Large sources may require many page requests. Conditional requests and extraction reuse reduce repeated work, but checking for changes still requires contacting the sources.
