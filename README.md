@@ -288,7 +288,7 @@ Tests cover extraction, evidence matching, PDF page validation, confidence gates
 
 ## Technical note
 
-The **three-page technical note PDF** is included at [docs/technical-note.pdf](docs/technical-note.pdf). It covers architecture, technology choices, discovery, extraction, verification, confidence methodology, anti-hallucination safeguards and change detection. An [editable Markdown version](docs/technical-note.md) is also available.
+The **three-page technical note PDF** is included at [docs/technical-note.pdf](docs/technical-note.pdf) If showing unrendered at github, download it. It covers architecture, technology choices, discovery, extraction, verification, confidence methodology, anti-hallucination safeguards and change detection. An [editable Markdown version](docs/technical-note.md) is also available.
 
 
 If port 8501 is occupied, use:
